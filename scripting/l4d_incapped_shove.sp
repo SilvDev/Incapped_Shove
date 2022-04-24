@@ -1,6 +1,6 @@
 /*
 *	Incapped Shove
-*	Copyright (C) 2021 Silvers
+*	Copyright (C) 2022 Silvers
 *
 *	This program is free software: you can redistribute it and/or modify
 *	it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 
 
-#define PLUGIN_VERSION 		"1.10"
+#define PLUGIN_VERSION 		"1.11"
 
 /*======================================================================================
 	Plugin Info:
@@ -31,6 +31,10 @@
 
 ========================================================================================
 	Change Log:
+
+1.11 (24-Apr-2022)
+	- GameData file updated: Wildcarded signatures to be compatible with the "Left4DHooks" plugin version 1.98 and newer.
+	- Changed the swing SDKCall to the correct method.
 
 1.10 (04-Dec-2021)
 	- Changes to fix warnings when compiling on SourceMod 1.11.
@@ -178,7 +182,6 @@ public void OnPluginStart()
 	StartPrepSDKCall(SDKCall_Entity);
 	if( PrepSDKCall_SetFromConf(hGameData, SDKConf_Signature, "CTerrorWeapon::OnSwingStart") == false )
 		SetFailState("Could not load the 'CTerrorWeapon::OnSwingStart' gamedata signature.");
-	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
 	g_hSDK_OnSwingStart = EndPrepSDKCall();
 	if( g_hSDK_OnSwingStart == null )
 		SetFailState("Could not prep the 'CTerrorWeapon::OnSwingStart' function.");
@@ -362,7 +365,7 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 		int entity = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 		if( entity <= MaxClients || IsValidEntity(entity) == false ) return Plugin_Continue;
 
-		SDKCall(g_hSDK_OnSwingStart, entity, entity);
+		SDKCall(g_hSDK_OnSwingStart, entity);
 
 		// Hurt
 		if( g_iCvarHurt )
